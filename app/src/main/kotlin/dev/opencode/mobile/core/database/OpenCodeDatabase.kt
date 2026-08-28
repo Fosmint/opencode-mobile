@@ -8,7 +8,12 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [ServerEntity::class, SessionEntity::class, MessageEntity::class, ProjectEntity::class],
     version = 1,
-    exportSchema = true,
+    // No schema export directory is configured for this module (no
+    // `room.schemaLocation` ksp arg, no Room Gradle plugin applied), so
+    // exportSchema=true just produces a build warning every run with
+    // nothing to show for it. Flip to true once schema history/migration
+    // testing is actually needed and room.schemaLocation is wired up.
+    exportSchema = false,
 )
 abstract class OpenCodeDatabase : RoomDatabase() {
     abstract fun serverDao(): ServerDao

@@ -11,7 +11,9 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -139,7 +141,7 @@ private fun CodeBlock(code: String, language: String?) {
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
                 .fillMaxWidth()
-                .horizontalScroll(rememberScrollStateCompat())
+                .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 12.dp, vertical = 8.dp),
         )
     }
@@ -256,9 +258,3 @@ private fun splitCodeFences(input: String): List<TextSegment> {
     }
     return result
 }
-
-@Composable
-private fun rememberScrollStateCompat() = androidx.compose.foundation.rememberScrollState()
-
-private fun Modifier.horizontalScroll(state: androidx.compose.foundation.ScrollState): Modifier =
-    androidx.compose.foundation.horizontalScroll(this, state)

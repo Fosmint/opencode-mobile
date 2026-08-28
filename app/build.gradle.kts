@@ -38,6 +38,14 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+        // Material3 components used throughout (TopAppBar, ModalBottomSheet,
+        // etc) are marked @ExperimentalMaterial3Api upstream. Opting in at
+        // the module level avoids sprinkling @OptIn on every composable that
+        // touches one — the alternative the compiler otherwise treats as a
+        // hard compile error, not just a warning.
+        freeCompilerArgs += listOf(
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        )
     }
 
     buildFeatures {

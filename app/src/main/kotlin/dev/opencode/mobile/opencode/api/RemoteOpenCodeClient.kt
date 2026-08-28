@@ -104,7 +104,7 @@ class RemoteOpenCodeClient(
 
     private suspend inline fun <reified B, reified T> post(path: String, body: B): Result<T> {
         return try {
-            val payload = json.encodeToString(body)
+            val payload = json.encodeToString<B>(body)
             val request = Request.Builder()
                 .url(url(path))
                 .post(payload.toRequestBody(jsonMediaType))

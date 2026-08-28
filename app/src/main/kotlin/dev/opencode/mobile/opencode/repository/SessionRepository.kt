@@ -63,7 +63,7 @@ class SessionRepository(
                     id = message.id,
                     sessionId = sessionId,
                     type = message.type,
-                    rawJson = JsonConfig.default.encodeToString(message),
+                    rawJson = JsonConfig.default.encodeToString<SessionMessage>(message),
                     createdAt = message.time.created,
                 )
             }
