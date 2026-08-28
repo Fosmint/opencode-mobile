@@ -27,11 +27,11 @@ import kotlin.coroutines.resumeWithException
  *
  * Endpoints implemented here were verified against the upstream server
  * route definitions in
- * packages/opencode/src/server/routes/instance/httpapi/groups/*.ts
+ * packages/opencode/src/server/routes/instance/httpapi/groups
  * (session.ts, health.ts, event.ts, model.ts, file.ts, location.ts) rather
  * than assumed — see the project README for the exact commit this was
  * checked against. Note the file group lives at `/file` and `/file/content`
- * (identifiers `file.list`/`file.read`), not `/api/fs/*` — that path was
+ * (identifiers `file.list`/`file.read`), not `/api/fs` (glob) — that path was
  * invented in an earlier pass and corrected once real sources were
  * available. If a future OpenCode server version renames or restructures
  * these routes, this is the only file that needs to change;

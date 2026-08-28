@@ -7,7 +7,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 /**
  * These models mirror the OpenCode server protocol as defined upstream in
- * packages/protocol/src/groups/*.ts and packages/schema/src/*.ts.
+ * packages/protocol/src/groups (*.ts files) and packages/schema/src
+ * (*.ts files).
  *
  * Field names and shapes are intentionally kept close to the wire format
  * (snake/camel as emitted by the server) rather than "Android-ified", so

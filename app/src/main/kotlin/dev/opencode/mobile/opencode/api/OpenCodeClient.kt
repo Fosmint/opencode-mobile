@@ -70,7 +70,7 @@ interface OpenCodeClient {
      * GET /file — list files/directories at [path] (defaults to project
      * root when null). Confirmed against
      * `packages/opencode/src/server/routes/instance/httpapi/groups/file.ts`
-     * (`FileApi`, identifier `file.list`) — there is no `/api/fs/*`
+     * (`FileApi`, identifier `file.list`) — there is no `/api/fs` (glob)
      * namespace upstream, that was an invented path in an earlier pass.
      */
     suspend fun listFiles(path: String? = null, directory: String? = null): Result<List<FileSystemEntry>>
