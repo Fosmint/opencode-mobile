@@ -1,0 +1,155 @@
+ЗАДАЧА: Создать полноценный OpenCode Mobile для Android
+
+Ты — senior Android engineer, software architect и AI coding-agent engineer.
+
+Твоя задача — не написать демонстрационный прототип и не сделать UI-макет, а создать реально работающий Android-проект, который можно собрать в APK через GitHub Actions.
+
+1. Главная цель
+
+Создай современное Android-приложение — мобильный клиент/адаптацию OpenCode для Android.
+
+Используй исходную архитектуру и API OpenCode как основу. Перед началом реализации изучи актуальный upstream-репозиторий OpenCode, его server/API, SDK, sessions, events, projects, tools, permissions и model/provider architecture.
+
+OpenCode использует client/server architecture: headless server предоставляет HTTP/OpenAPI API, а разные клиенты могут работать поверх него. Android-приложение должно использовать именно этот принцип, а не пытаться копировать TUI.
+
+Главная идея:
+
+Android App
+→ OpenCode API / SDK
+→ OpenCode Agent
+→ LLM Provider
+→ Tools
+→ Files / Git / Shell / LSP
+
+2. НЕ делай это
+
+Не превращай TUI OpenCode в Android UI.
+Не используй терминальный интерфейс как основной интерфейс.
+Не делай WebView-обёртку вокруг существующего OpenCode Web UI.
+Не создавай статический fake-chat.
+Не используй mock responses.
+Не хардкодь сообщения AI.
+Не создавай десятки ненужных экранов ради количества файлов.
+Приложение должно реально взаимодействовать с OpenCode server/API.
+
+3. Android Stack
+
+Kotlin, Jetpack Compose, Material 3, Coroutines, StateFlow, Navigation Compose, OkHttp, SSE/WebSocket-compatible streaming architecture, Kotlin Serialization, Room, DataStore, Android Storage Access Framework, GitHub Actions для CI/CD.
+
+4. Архитектура
+
+app
+├── core
+│   ├── network
+│   ├── database
+│   ├── storage
+│   └── common
+├── opencode
+│   ├── api
+│   ├── models
+│   ├── repository
+│   ├── events
+│   └── session
+├── features
+│   ├── home
+│   ├── projects
+│   ├── sessions
+│   ├── chat
+│   ├── files
+│   ├── diff
+│   ├── settings
+│   └── terminal
+└── ui
+    ├── components
+    ├── theme
+    └── icons
+
+5. OpenCode Integration
+
+Подключение к серверу, health check, projects, sessions (create/delete/rename), отправка сообщений, streaming responses, tool execution, reasoning/thinking states, permission requests, stop/interrupt generation, model list/switch, project info, diff, отображение изменений, события сервера, восстановление состояния после перезапуска. Использовать OpenAPI/SDK вместо ручного дублирования API.
+
+6. Режимы подключения
+
+Remote: http(s)://IP:PORT, Basic Auth, несколько серверов, reconnect, timeout, понятные ошибки.
+Local/Embedded: архитектура готова на будущее (OpenCodeClient → RemoteOpenCodeClient → FutureLocalOpenCodeClient), не ломать проект из-за отсутствия embedded runtime.
+
+7. Chat
+
+Список сообщений, streaming текста, Markdown, code blocks, syntax highlighting, копирование кода, раскрывающиеся tool calls, loading/error state, stop/retry/regenerate, model selector, agent selector, token/cost info, attachments, multiline input.
+
+8. File Explorer
+
+Folders/files, expand/collapse, поиск, открытие файла, создание/rename/delete, copy path, отправка файла в AI context. Storage Access Framework где нужно, без широких permissions.
+
+9. Code Viewer / Editor
+
+Syntax highlighting, line numbers, horizontal scrolling, copy/select/search, diff display. Архитектура на будущее для полноценного редактора.
+
+10. Diff Viewer
+
+Added/removed lines, modified files, filename, statistics. Читаемо на маленьком экране.
+
+11. Terminal
+
+Abstraction для терминала, отправка shell-команд через backend, если поддерживается. Всегда показывать: command → running → stdout/stderr → exit code. Не притворяться, что команда выполнилась.
+
+12. Settings
+
+Servers (add/edit/delete/test), authentication, model/provider settings, theme, notifications, cache, about, diagnostics.
+
+13. ДИЗАЙН
+
+Современный, минималистичный, чёрно-белый, философски близкий к ChatGPT (не копировать логотип/UI). Чистый интерфейс, много пространства, аккуратная типографика, плавные анимации, скруглённые поверхности, тёмная тема, grayscale palette (BLACK/DARK GRAY/GRAY/LIGHT GRAY/WHITE), без ярких акцентов, градиентов, glassmorphism.
+
+Все иконки — SVG (Compose ImageVector). Никаких PNG/JPG/emoji/unicode-символов вместо иконок.
+
+14. UI Structure
+
+Bottom Navigation: Home / Projects / Sessions / Settings. Chat — главный экран. Adaptive layout на больших экранах (sidebar + chat).
+
+15. Animations
+
+Аккуратные, не превращать в showcase. 60 FPS — приоритет.
+
+16. Local persistence
+
+Room: servers, sessions cache, messages cache, projects cache, settings metadata.
+DataStore: preferences, active server, theme, UI settings.
+Секреты — не в plaintext database.
+
+17. Error Handling
+
+Понятные пользователю ошибки (Connection failed, Server unavailable, Authentication failed, Timeout, Invalid response, Streaming disconnected, Permission denied), retry, без stack trace в UI, логи через Diagnostics.
+
+18. GitHub Actions
+
+.github/workflows/build.yml: checkout, setup JDK, setup Android SDK, gradle cache, lint, unit tests, compile, build debug APK, upload artifact.
+.github/workflows/release.yml: сборка release APK по git tag, секреты через GitHub Secrets, keystore не хранить в Git.
+
+19. Gradle
+
+Kotlin DSL, settings.gradle.kts, build.gradle.kts, app/build.gradle.kts, gradle/libs.versions.toml, версии централизованы.
+
+20. Testing
+
+Тесты для: API client, session repository, message streaming, JSON serialization, server connection, local persistence, ViewModel state. Без fake tests (assertTrue(true)).
+
+21. README
+
+Что это, архитектура, требования, локальный запуск, подключение сервера, настройка, сборка, GitHub Actions, release, ограничения Android, roadmap. Указать, что это независимый клиент, не официальный продукт OpenCode.
+
+22. Лицензия
+
+Проверить лицензию upstream OpenCode перед копированием кода. Не копировать большие куски кода без необходимости. Предпочтительно свой Android UI + официальный API/SDK как контракт.
+
+23. Development Strategy — поэтапно (Phase 1–12): проект → API → server connection → projects+sessions → streaming chat → tools/reasoning/permissions → files → diff → settings → GitHub Actions → тестирование → polish UI.
+
+24. Критически важное правило
+
+НЕ ОСТАНАВЛИВАЙСЯ НА ПЛАНЕ. Создавать реальные файлы. Не выдумывать API. Не использовать mock API в финальной реализации. Не оставлять TODO вместо ключевой функциональности MVP.
+
+25. Финальный результат
+
+GitHub-ready Android project: Android app, modern black/white UI, OpenCode API integration, streaming AI chat, projects, sessions, files, diff viewer, tools, permissions, settings, local persistence, tests, GitHub Actions, README, buildable APK.
+
+Приоритет: REAL FUNCTIONALITY > ARCHITECTURE > UX > VISUAL POLISH. Но интерфейс должен выглядеть как полноценное современное коммерческое AI-приложение, а не как учебный Android-проект.

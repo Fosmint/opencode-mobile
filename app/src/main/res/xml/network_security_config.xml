@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Remote OpenCode servers are frequently self-hosted on a LAN over plain HTTP
+  (e.g. http://192.168.x.x:4096). This config allows cleartext traffic for
+  such user-supplied hosts while leaving the door open to restrict this in
+  Settings > Diagnostics in the future. HTTPS servers work regardless.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
