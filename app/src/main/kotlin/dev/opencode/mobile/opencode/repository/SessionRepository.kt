@@ -9,6 +9,7 @@ import dev.opencode.mobile.opencode.api.OpenCodeClient
 import dev.opencode.mobile.opencode.models.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
 
 /**
  * Mediates between a live [OpenCodeClient] and the local Room cache so the
